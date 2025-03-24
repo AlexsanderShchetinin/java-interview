@@ -7,11 +7,11 @@
 
 #### [Состав команды на проекте, какие обязанности каждого участника ?](..//answer/project.md)
 
-#### [Стенды IT продукта](../answer/gitflow.md#стенды-it-продукта)
+#### [Стенды IT продукта](../answer/gitflow.md#stands-it-product)
 
 #### [Как происходит мониторинг работы продукта на стендах ?]()
 
-#### [HotFix. Что это и как его делают ?](..//answer/gitflow.md)
+#### [HotFix. Что это и как его делают ?](../answer/gitflow.md)
 
 #### [OpenID ](https://habr.com/ru/companies/nixys/articles/566910/)
 
