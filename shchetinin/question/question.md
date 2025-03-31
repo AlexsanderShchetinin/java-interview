@@ -9,9 +9,9 @@
 
 #### [Стенды IT продукта](../answer/gitflow.md#stands-it-product)
 
-#### [Как происходит мониторинг работы продукта на стендах ?]()
+#### [Как происходит мониторинг работы продукта на стендах ?](../answer/gitflow.md#настройка-инструментов-мониторинга)
 
-#### [HotFix. Что это и как его делают ?](../answer/gitflow.md)
+#### [HotFix. Что это и как его делают ?](../answer/gitflow.md#hotfix)
 
 #### [OpenID ](https://habr.com/ru/companies/nixys/articles/566910/)
 
@@ -31,9 +31,9 @@
 
 #### [Методы Mono и Flux]()
 
-#### [Kubernetes что это, его ключевые структурные компоненты?]()
+#### [Kubernetes что это, его ключевые структурные компоненты?](..//answer/kubernetes.md)
 
-#### [Как логи попадают в Grafana]()
+#### [Как логи попадают в Grafana](../answer/gitflow.md#grafana)
 
 #### [Что такое "n+1 select" проблема и как она решается в ORM фрэймворках]()
 
