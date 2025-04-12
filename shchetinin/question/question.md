@@ -15,7 +15,7 @@
 
 #### [OpenID ](https://habr.com/ru/companies/nixys/articles/566910/)
 
-#### [Как работает Keycloak, из чего состоит (подробно)]()
+#### [Как работает Keycloak, из чего состоит (подробно)](../answer/keycloak.md)
 
 #### [Какие проблемы решаются, используя WebFlux?]()
 

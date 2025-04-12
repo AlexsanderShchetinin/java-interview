@@ -1,4 +1,4 @@
-package xyz.enhorse.example.oop;
+package shch.sskier.interview.oop;
 
 /**
  * @author <a href="mailto:pavel13kalinin@gmail.com">Pavel Kalinin</a>
