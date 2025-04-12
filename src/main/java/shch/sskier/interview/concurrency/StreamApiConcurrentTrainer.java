@@ -1,7 +1,11 @@
 package shch.sskier.interview.concurrency;
 
 import lombok.ToString;
+import shch.sskier.interview.MemoryTest;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
@@ -11,13 +15,31 @@ import java.util.stream.Stream;
 
 /**
  * @author Alexander Shchetinin 11.04.2025
- *
  */
 
 @ToString
 public class StreamApiConcurrentTrainer extends StreamBase {
 
-    public static void main(String[] args) {
+    public void runTrainer() {
+        // Получение информации о текущем использовании памяти
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryMXBean.getHeapMemoryUsage();
+        System.out.println("Heap Memory before runTrainer Usage: " + heapMemoryUsage);
+
+
+        auditMemoryOurClass(); // посмотрим сколько памяти занимают пустые коллекции и переменные в StreamBase
+        calculateSize(concurrentList1, "empty concurrentList1 in class StreamApiConcurrentTrainer");
+
+        ConcurrentExtension<Integer, String> extension = new ConcurrentExtension<>("extensionParam");
+        extension.setExtensionParam(extension.getExtensionParam());
+        extension.setNameStream("Main thread by testing memory ");
+        extension.setElement(999);
+        extension.setNumStream(999);
+        concurrentList1.add(extension);
+        calculateSize(concurrentList1, "concurrentList1 with one element ConcurrentExtension");
+
+        arrayListInteger.add(iCount);
+        calculateSize(arrayListInteger, "arrayListInteger with one Integer object");
 
         // Create first thread
         Thread thread1 = new Thread(new Runnable() {
@@ -33,24 +55,33 @@ public class StreamApiConcurrentTrainer extends StreamBase {
                 int randomInt = new Random().nextInt();
                 for (int i = 0; i < iCount; i++) {
                     ConcurrentExtension<Integer, String> extension = new ConcurrentExtension<>("extensionParam");
+                    if (i == 0) calculateSize(extension, " empty ConcurrentExtension"); // проверяем размер объекта
                     extension.setExtensionParam(extension.getExtensionParam() + i);
                     extension.setNameStream("Collection1 Thread1  ");
                     extension.setElement(randomInt + i);
                     extension.setNumStream(i + 1);
+                    if (i == 0) calculateSize(extension, " full ConcurrentExtension"); // проверяем размер объекта
                     concurrentList1.add(extension);
+                    if (i == 0) calculateSize(concurrentList1, " concurrentList1 with one obj");
+                    if (i == iCount - 1) calculateSize(concurrentList1, " concurrentList1 with " + iCount + " obj");
+
 
                     // попытка добавить из первого потока данные в коллекцию №2
                     ConcurrentExtension2Impl<Integer, Long> extension2 = new ConcurrentExtension2Impl<>();
+                    if (i == 0) calculateSize(extension2, "empty ConcurrentExtension2Impl");
                     extension2.setExtensionParam(Integer.toUnsignedLong(i));
                     extension2.setNameStream("Collection2 Thread1 ");
                     extension2.setElement(randomInt + i);
                     extension2.setNumStream(i + 1);
+                    if (i == 0) calculateSize(extension2, "full ConcurrentExtension2Impl");
                     concurrentList2.add(extension2);
+                    if (i == 0) calculateSize(concurrentList2, " concurrentList2 with one obj");
+                    if (i == iCount - 1) calculateSize(concurrentList2, " concurrentList2 with " + iCount + " obj");
 
                     // попытка посмотреть записи из второй коллекции, так как 2ой поток уже должен их добавить
                     // получить по индексу
                     // посмотреть полный размер списка (пару раз)
-                    if (i % (iCount/3) == 0){
+                    if (i % (iCount) == 0) {
                         concurrentList2.get(i).readStream();
                         System.out.println("Текущий размер Collection2 = " + concurrentList2.size());
                     }
@@ -95,6 +126,15 @@ public class StreamApiConcurrentTrainer extends StreamBase {
         //start threads
         thread1.start();
         thread2.start();
+
+        try {
+            Thread.sleep(5000); // Задержка в 5 с
+            // Получение информации о текущем использовании памяти
+            MemoryUsage heapMemoryUsage2 = memoryMXBean.getHeapMemoryUsage();
+            System.out.println("Heap Memory during runTrainer Usage: " + heapMemoryUsage2);
+        } catch (InterruptedException e) {
+            System.out.println("Tread_1 interrupted.");
+        }
 
         // wait finished threads
         try {
