@@ -8,6 +8,7 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -21,6 +22,15 @@ import java.util.stream.Stream;
 public class StreamApiConcurrentTrainer extends StreamBase {
 
     public void runTrainer() {
+        List<Integer> testArrayList = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9));
+
+        for (int i = 0; i < testArrayList.size(); i++) {
+            testArrayList.remove(i);
+        }
+        for (Integer i : testArrayList) {  // ConcurrentModificationException при удалении из коллекции в цикле forEach
+            testArrayList.remove(i);
+        }
+
         // Получение информации о текущем использовании памяти
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
         MemoryUsage heapMemoryUsage = memoryMXBean.getHeapMemoryUsage();

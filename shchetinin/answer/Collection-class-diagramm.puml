@@ -1,0 +1,145 @@
+@startuml
+'https://plantuml.com/class-diagram
+'skinparam groupInheritance 2
+'left to right direction
+
+interface RandomAccess {
+}
+interface Cloneable {
+}
+interface Serializable {
+}
+
+interface Iterable {
+Iterator<T> iterator()
+void forEach(Consumer<? super T> action)
+Spliterator<T> spliterator()
+}
+
+interface Collection {
+int size();
+boolean isEmpty();
+boolean contains(Object o);
+boolean containsAll(Collection<?> c);
+Object[] toArray();
+<T> T[] toArray(T[] a);
+default <T> T[] toArray(IntFunction<T[]> generator){...};
+boolean add(E e);
+boolean remove(Object o);
+boolean removeAll(Collection<?> c);
+boolean addAll(Collection<? extends E> c);
+default boolean removeIf(Predicate<? super E> filter){...};
+boolean retainAll(Collection<?> c);
+void clear();
+default Stream<E> stream(){...}
+default Stream<E> parallelStream(){...}
+}
+
+interface SequencedCollection<<Упорядоченная коллекция>>{
+SequencedCollection<E> reversed();
+default void addFirst(E e){throw new UnsupportedOperationException();}
+default void addLast(E e){throw new UnsupportedOperationException();}
+default E getFirst() {return this.iterator().next();}
+default E getLast() {return this.reversed().iterator().next();}
+default E removeFirst(){...}
+default E removeLast(){...}
+}
+
+interface Queue <<Очередь>>{
+boolean offer(E e);
+E remove();
+E poll();
+E element();
+E peek();
+}
+
+interface Deque<<Двунаправленная очередь>> {
+boolean offerFirst(E e);
+boolean offerLast(E e);
+E pollFirst();
+E pollLast();
+E peekFirst();
+E peekLast();
+boolean removeFirstOccurrence(Object o);
+boolean removeLastOccurrence(Object o);
+Iterator<E> descendingIterator();
+default Deque<E> reversed(){...}
+..Stack methods..
+void push(E e);
+E pop();
+}
+
+interface List {
+boolean addAll(int index, Collection<? extends E> c);
+default void replaceAll(UnaryOperator<E> operator) {...}
+default void sort(Comparator<? super E> c) {...}
+E get(int index);
+E set(int index, E element);
+void add(int index, E element);
+E remove(int index);
+int indexOf(Object o);
+int lastIndexOf(Object o);
+ListIterator<E> listIterator();
+ListIterator<E> listIterator(int index);
+List<E> subList(int fromIndex, int toIndex);
+..static methods..
+{static} <E> List<E> of() {return (List<E>) ImmutableCollections.EMPTY_LIST;}
+{static} <E> List<E> of(E e1, ... E e10) {return new ImmutableCollections.List12<>(e1, ..., e10);}
+{static} <E> List<E> of(E... elements) {}
+{static} <E> List<E> copyOf(Collection<? extends E> coll) {return ImmutableCollections.listCopy(coll);}
+}
+
+abstract class AbstractCollection {
+}
+abstract class AbstractList {
+}
+
+class ArrayList<<Динамический массив>> {
+- {static} final int DEFAULT_CAPACITY = 10;
+- {static} final Object[] EMPTY_ELEMENTDATA = {};
+- {static} final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
+~ transient Object[] elementData;
+- int size;
++ void ensureCapacity(int minCapacity) {...}
++ void trimToSize() {...}
+}
+
+abstract class AbstractSequentialList {
+}
+
+class LinkedList<<Двунаправленный связанный список>> {
+~transient int size = 0;
+~transient Node<E> first;
+~transient Node<E> last;
+
+}
+
+'links
+Collection <|.. AbstractCollection
+
+Iterable <|-- Collection
+Collection <|- SequencedCollection
+SequencedCollection <|- List
+
+AbstractCollection <|-- AbstractList
+List <|.. AbstractList
+
+RandomAccess <|.. ArrayList
+Cloneable <|.. ArrayList
+Serializable <|.. ArrayList
+AbstractList <|-- ArrayList
+List <|.. ArrayList
+
+Queue -|> Collection
+Deque -|> Queue
+SequencedCollection <|-- Deque
+
+
+AbstractSequentialList -|> AbstractList
+AbstractSequentialList <|-- LinkedList
+List <|.. LinkedList
+Deque <|.. LinkedList
+Cloneable <|.. LinkedList
+Serializable <|.. LinkedList
+
+@enduml
